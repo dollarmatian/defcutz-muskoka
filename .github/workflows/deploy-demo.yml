@@ -1,0 +1,88 @@
+# Deploys the DEMO site only.
+#
+# This workflow cannot reach the live site, and not by convention. It assumes an
+# IAM role whose policy carries an explicit Deny on the live bucket, so a wrong
+# bucket name here is a failed job rather than an incident. There are no AWS
+# access keys: GitHub authenticates by OIDC and the role's trust policy names
+# this repository.
+#
+# It stays inert until the demo stack exists. Provision infra/, set the three
+# repository variables it prints, and it starts running.
+
+name: Deploy demo site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # required for OIDC
+
+concurrency:
+  group: deploy-demo
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # Version comes from .nvmrc so local and CI cannot drift. It is newer than
+      # the Lambda runtime on purpose: jsdom pulls in undici, which needs more
+      # than Node 20, and the logic under test is version-independent.
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    # Skip cleanly rather than fail red while the demo stack does not exist.
+    if: ${{ vars.AWS_ROLE_ARN != '' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+
+      # Three passes, because one Cache-Control header cannot be right for all
+      # three kinds of file. Without them browsers cache pages heuristically for
+      # months and visitors keep seeing an old build after a deploy.
+      - name: Sync hashed assets, immutable
+        run: |
+          aws s3 sync out/_next "s3://${{ vars.AWS_S3_BUCKET }}/_next" --delete \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Sync HTML, always revalidate
+        run: |
+          aws s3 sync out/ "s3://${{ vars.AWS_S3_BUCKET }}" --delete \
+            --exclude "*" --include "*.html" \
+            --cache-control "no-cache"
+
+      # data/ is written by the Lambdas. --delete would remove it, so it is
+      # excluded here exactly as it is in the production deploy.
+      - name: Sync everything else, one day
+        run: |
+          aws s3 sync out/ "s3://${{ vars.AWS_S3_BUCKET }}" --delete \
+            --exclude "*.html" --exclude "_next/*" --exclude "data/*" \
+            --cache-control "public, max-age=86400"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ vars.AWS_CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/*"

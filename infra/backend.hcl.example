@@ -1,0 +1,12 @@
+# Copy to backend.hcl and fill in. backend.hcl is gitignored.
+#
+#   terraform init -reconfigure -backend-config=backend.hcl
+#
+# Backend settings are environment-specific, and the bucket name identifies an
+# AWS account, so it stays out of the repository.
+
+bucket       = "your-tfstate-bucket"
+key          = "defcutz-muskoka/terraform.tfstate"
+region       = "us-east-1"
+encrypt      = true
+use_lockfile = true

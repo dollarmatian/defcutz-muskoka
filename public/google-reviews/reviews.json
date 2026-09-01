@@ -1,0 +1,55 @@
+{
+  "success": true,
+  "totalReviews": 6,
+  "fetchedAt": "2026-05-18T21:03:57.085Z",
+  "reviews": [
+    {
+      "id": "sample-1",
+      "author": "C. G.",
+      "rating": 5,
+      "date": "2026-05-02T17:44:45.658225Z",
+      "reply": "Thanks for taking the time to leave a review."
+    },
+    {
+      "id": "sample-2",
+      "author": "S. B.",
+      "rating": 5,
+      "text": "Amazing experience and atmosphere. My husband has gone here twice to get his hair cut and it was amazing (fade). Today we also brought our squirmy 2 year old and he was handled so well (lots of toys and things for him to do, lots of patience and understanding). Both their hair cuts were 10/10 once again. We will be coming here for hair cuts for the foreseeable future!! Thank you!!!",
+      "date": "2026-05-02T00:40:53.505416Z",
+      "reply": "Thanks for taking the time to leave a review."
+    },
+    {
+      "id": "sample-3",
+      "author": "P. W.",
+      "rating": 5,
+      "text": "Patrick gave me one of the best barber cuts I've had in years, despite me being a old, fat and white senior citizen. Made me feel and look 15 years younger. Thanks Patrick!",
+      "date": "2026-04-28T20:14:53.000339Z",
+      "reply": "Thanks for taking the time to leave a review."
+    },
+    {
+      "id": "sample-4",
+      "author": "K. s.",
+      "rating": 5,
+      "text": "Great barber service , great cut. My son likes coming here",
+      "date": "2026-04-16T17:59:33.626489Z",
+      "reply": "Thanks for taking the time to leave a review."
+    },
+    {
+      "id": "sample-5",
+      "author": "T. S.",
+      "rating": 5,
+      "text": "Patrick is phenomenal. Professional and accomodating, man knows his stuff! For anyone looking for a spot to get taken care of, please check out Def Cutz!",
+      "date": "2026-04-09T20:40:54.292405Z",
+      "reply": "Thanks for taking the time to leave a review."
+    },
+    {
+      "id": "sample-6",
+      "author": "A. T.",
+      "rating": 5,
+      "text": "Went to Def Cutz looking for a last-minute haircut, and the whole experience was extremely painless. Online booking the day before was easy with a convenient timeslot (it\u2019s great to be able to get a haircut at 8pm after work). Very fair price and a great hair and beard cut. I enjoyed the chat; Patrick is very friendly and grounded\u2014and I don\u2019t usually like talking at the barber. Thank you, Patrick, for making it a nice experience. I\u2019ll be back! :)",
+      "date": "2026-04-08T13:58:02.796748Z",
+      "reply": "Thanks for taking the time to leave a review."
+    }
+  ],
+  "note": "De-identified sample. The live site reads the full set from /data/reviews.json, written daily by the fetch-reviews Lambda. This file is only the offline fallback."
+}

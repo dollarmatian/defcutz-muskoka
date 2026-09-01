@@ -1,0 +1,25 @@
+# Copy to terraform.tfvars and fill in. terraform.tfvars is gitignored.
+
+aws_region      = "us-east-1"
+google_place_id = "your-google-place-id"
+
+# No credentials go in this file. The Lambdas read them from SSM Parameter
+# Store at runtime, so no secret is written into Terraform state. Create them
+# once with the AWS CLI:
+#
+#   aws ssm put-parameter --type SecureString \
+#     --name /defcutz-demo/google-credentials \
+#     --value file://service-account.json
+#
+# Optional, only needed for the Business Profile tier:
+#   /defcutz-demo/google-oauth-client-id
+#   /defcutz-demo/google-oauth-client-secret
+#   /defcutz-demo/google-oauth-refresh-token
+#   /defcutz-demo/google-maps-api-key
+
+# Only change if the live site's bucket is named differently. This value is
+# used to build an explicit Deny, so getting it right matters.
+live_bucket_name = "defcutzmuskoka.com"
+
+# Set false if this AWS account already has the GitHub OIDC provider.
+create_github_oidc_provider = true
