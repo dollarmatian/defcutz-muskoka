@@ -1,4 +1,4 @@
-# Each function is a single file. The Node 20 runtime provides the AWS SDK, so
+# Each function is a single file. The Node 22 runtime provides the AWS SDK, so
 # there is nothing to bundle and the zip is the source file renamed.
 data "archive_file" "function" {
   for_each = local.functions
@@ -18,7 +18,7 @@ resource "aws_lambda_function" "function" {
   function_name    = "${var.name_prefix}-${each.key}"
   description      = each.value.description
   role             = aws_iam_role.lambda.arn
-  runtime          = "nodejs20.x"
+  runtime          = "nodejs22.x"
   handler          = "index.handler"
   timeout          = each.value.timeout
   memory_size      = each.value.memory

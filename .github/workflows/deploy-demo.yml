@@ -29,9 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      # Version comes from .nvmrc so local and CI cannot drift. It is newer than
-      # the Lambda runtime on purpose: jsdom pulls in undici, which needs more
-      # than Node 20, and the logic under test is version-independent.
+      # Version comes from .nvmrc so local, CI and the Lambda runtime cannot drift.
+      # All three are Node 22. The runtime moved off Node 20 when AWS deprecated it
+      # on 30 April 2026. Node 22 also satisfies jsdom, which pulls in undici and
+      # needs more than Node 20.
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc

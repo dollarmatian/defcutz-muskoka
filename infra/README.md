@@ -46,7 +46,7 @@ returns environment variables in plaintext, and the value would live in the stat
   Access Control. No public bucket policy and no website endpoint.
 - A CloudFront distribution with three cache behaviours: hashed assets cached
   hard, HTML revalidated, and `/data/*` uncached so the daily writes appear.
-- Three Node 20 Lambdas zipped straight from `../lambda`, with the production
+- Three Node 22 Lambdas zipped straight from `../lambda`, with the production
   timeouts and memory, on EventBridge schedules.
 - A role for GitHub Actions, assumed by OIDC. **No access keys are created.**
 
